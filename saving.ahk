@@ -92,10 +92,8 @@ CollectionCenter(initCode, centerCode) {
 ;=============================
 ;Saving with Collection Center
 ;=============================
-^+Numpad9::
-^Numpad9::
-!Numpad9::
 !NumpadSub::
+^!NumpadSub::
 ^NumpadEnter::
 ^!NumpadEnter::
 ^Space::
