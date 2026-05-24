@@ -2,12 +2,31 @@
 ;Selection, Func and Tabs
 ;========================
 dobFieldCtrl := "ThunderRT6TextBox22"
-givennameFieldCtrl := "ThunderRT6TextBox23"
+givenNameFieldCtrl := "ThunderRT6TextBox23"
 
+SelectAndCreate(selectionNumber) {
+    Send "!" selectionNumber
+    Send "{F3}"
+}
+
+ClearMedicareGotoGivenName() {
+    global givenNameFieldCtrl, labTrakWin
+
+	Send "^+{Left}"
+	Sleep 80
+	Send "{Delete}"
+	Sleep 80
+	ControlFocus(givenNameFieldCtrl, labTrakWin)
+}
 
 !Numpad0::Send "!0"
+^!Numpad0::SelectAndCreate("0")
+
 !Numpad1::Send "!1"
+^!Numpad1::SelectAndCreate("1")
+
 !Numpad2::Send "!2"
+^!Numpad2::SelectAndCreate("2")
 
 !Numpad3::Send "{F3}"
 ^Numpad3::Send "{F3}"
@@ -21,32 +40,10 @@ givennameFieldCtrl := "ThunderRT6TextBox23"
 !Numpad6::
 !NumpadDiv::ControlFocus(dobFieldCtrl, labTrakWin)
 
+!Numpad8::SelectAndCreate("0")
 
 !Numpad7::Send "{Tab 7}"
 ^Numpad7::Send "{Tab 7}"
 
 !Numpad9::
-!NumpadMult::{
-	Send "^+{Left}"
-	Sleep 80
-	Send "{Delete}"
-	Sleep 80
-	ControlFocus(givennameFieldCtrl, labTrakWin)
-}
-
-;==============================
-;Select first one + New Episode
-;==============================
-!Numpad8::
-^!Numpad0::{
-    Send "!0"
-    Send "{F3}"
-}
-^!Numpad1::{
-    Send "!1"
-    Send "{F3}"
-}
-^!Numpad2::{
-    Send "!2"
-    Send "{F3}"
-}
+!NumpadMult::clearMedicareGotoGivenName()

@@ -1,22 +1,9 @@
-providedNumber := ""
-drCode := "T064"
-
-;Some common provider number
-;Dr Tablante - 064896AW
-;Dr Rem Iyengar - 008811VT
-
-;Some common drCode
-;Dr Ala Alzabin - A22
-;Dr Tablante - T064
-
-
 ;========================
 ;Doctor - Helper Function
 ;========================
 drCodeCtrl :="ThunderRT6TextBox6"
 providedNumberCtrl :="ThunderRT6TextBox3"
 clinicalNoteCtrl := "ThunderRT6TextBox1"
-
 
 RefDrProviderNumber() {
     Send "!d"
@@ -26,44 +13,13 @@ RefDrProviderNumber() {
     Send "{Tab 7}"
 }
 
-
-FillNoNotes() {
+FillClinicalNotes(notes:="No clinical notes provided") {
     global labTrakWin, clinicalNoteCtrl
     ControlFocus(clinicalNoteCtrl, labTrakWin)
     currentValue := ControlGetText(clinicalNoteCtrl, labTrakWin)
-	if currentValue == "" {
-		SendText("No clinical notes provided")
-	}
-    
-}
-
-AutoRefDrAndSave(){
-    global drCode, providedNumber
-
-    Send "!d"
-    Sleep 600
-
-    if Trim(drCode) != "" {
-        SendText(drCode)
-        Send "{Tab}"
-	Sleep 300
-    } else {
-        Send "{F4}"
-        Sleep 250
-        Send "{Tab 7}"
-	Sleep 300
-        if Trim(providedNumber) != "" {
-            SendText(providedNumber)
-            Send "{Enter}"
-            Send "!1"
-            Send "{Enter}"
-            Send "{Tab}"
-        }
-    }
-    
-    Sleep 300
-    FillNoNotes()
-    SaveDelayed()
+	if Trim(currentValue) = "" {
+		SendText notes
+	} 
 }
 
 ;===============
@@ -79,7 +35,7 @@ AutoRefDrAndSave(){
 	Send "{Tab}"
 	Sleep 200
 	Send "Y"
-        Sleep 200
+    Sleep 200
 	RefDrProviderNumber()
 }
 
@@ -88,7 +44,7 @@ AutoRefDrAndSave(){
 	Send "{Tab}"
 	Sleep 200
 	Send "N"
-        Sleep 200
+    Sleep 200
 	RefDrProviderNumber()
 }
 
@@ -99,8 +55,55 @@ AutoRefDrAndSave(){
 	RefDrProviderNumber()
 }
 
-!NumpadAdd::FillNoNotes()
+!NumpadAdd::FillClinicalNotes()
 ^!NumpadAdd::{
-	FillNoNotes()
+	FillClinicalNotes()
 	Send "{F9}"
 }
+
+
+
+;===============================
+;Doctor with Autosave - Function
+;===============================
+AutoRefDrAndSave(drCode:="", providedNumber:="", autoSave:="Yes"){
+    Send "!d"
+    Sleep 600
+
+    if drCode != "" {
+        SendText drCode
+        Send "{Tab}"
+	    Sleep 300
+    } else {
+        Send "{F4}"
+        Sleep 250
+        Send "{Tab 7}"
+	    Sleep 300
+        if providedNumber != "" {
+            SendText providedNumber
+            Send "{Enter}"
+            Send "!1"
+            Send "{Enter}"
+            Send "{Tab}"
+        }
+    }
+    
+    Sleep 300
+    if Trim(autoSave) = "Yes" {
+        FillClinicalNotes()
+        SaveDelayed()
+    }
+}
+
+
+;=============================
+;Doctor with Autosave - Action
+;=============================
+;Dr Tablante - T064 | 064896AW
++^!t::AutoRefDrAndSave("T064")
+
+;Dr Rem Iyengar - 008811VT
++^!i::AutoRefDrAndSave("", "008811VT")
+
+;Dr Ala Alzabin - A22
++^!a::AutoRefDrAndSave("A22", "", "No")
