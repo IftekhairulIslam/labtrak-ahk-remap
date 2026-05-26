@@ -30,32 +30,11 @@ FillClinicalNotes(notes:="No clinical notes provided") {
 	RefDrProviderNumber()
 }
 
-^!Down::{
-	FillCollectedBy()
-	Send "{Tab}"
-	Sleep 200
-	Send "Y"
+!NumpadAdd::{
+    FillClinicalNotes()
     Sleep 200
-	RefDrProviderNumber()
+    Send "!b"
 }
-
-^!Up::{
-	FillCollectedBy()
-	Send "{Tab}"
-	Sleep 200
-	Send "N"
-    Sleep 200
-	RefDrProviderNumber()
-}
-
-^!Right::{
-	FillCollectedBy()
-	Send "{Tab}"
-	Sleep 100
-	RefDrProviderNumber()
-}
-
-!NumpadAdd::FillClinicalNotes()
 ^!NumpadAdd::{
 	FillClinicalNotes()
 	Send "{F9}"
@@ -107,3 +86,6 @@ AutoRefDrAndSave(drCode:="", providedNumber:="", autoSave:="Yes"){
 
 ;Dr Ala Alzabin - A22
 +^!a::AutoRefDrAndSave("A22", "", "No")
+
+;Dr David Loh - A22
++^!l::AutoRefDrAndSave("", "0391897L", "")
