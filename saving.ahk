@@ -4,6 +4,13 @@
 !NumpadEnter::Send "{F9}"
 !Space::Send "{F9}"
 
+medicareFieldCtrl := "ThunderRT6TextBox46"
+!Backspace::{
+	global labTrakWin, medicareFieldCtrl
+	ControlFocus(medicareFieldCtrl, labTrakWin)
+	Send "{End}"
+	Send "{Backspace}"
+}
 
 SaveDelayed() {
     Sleep 200
@@ -17,9 +24,6 @@ InitiationFieldCtrl := "ThunderRT6TextBox36"
 collectionCodeFieldCtrl := "ThunderRT6TextBox35"
 
 SelectInitField() {
-    Send "!b"
-    Sleep 600
-    
     global labTrakWin, InitiationFieldCtrl
     ControlClick(InitiationFieldCtrl, labTrakWin)
     Sleep 50
@@ -51,9 +55,8 @@ IsCenterCodeFieldEmpty() {
     return true
 }
 
-CollectionCenter(initCode, centerCode) {
+CollectionCenter_Paused(initCode, centerCode) {
     SelectInitField()
-
     if IsInitFieldEmpty()
         SendText initCode
 
@@ -61,10 +64,17 @@ CollectionCenter(initCode, centerCode) {
     Sleep 200
 
     SelectCenterCodeField()
-
     if IsCenterCodeFieldEmpty()
         SendText centerCode
 
+    Send "{Tab}"
+}
+CollectionCenter(initCode, centerCode) {
+    SelectInitField()
+    SendText initCode
+    Send "{Tab}"
+    Sleep 200
+    SendText centerCode
     Send "{Tab}"
 }
 
@@ -93,7 +103,6 @@ CollectionCenter(initCode, centerCode) {
 ;Saving with Collection Center
 ;=============================
 !NumpadSub::
-^!NumpadSub::
 ^NumpadEnter::
 ^!NumpadEnter::
 ^Space::
