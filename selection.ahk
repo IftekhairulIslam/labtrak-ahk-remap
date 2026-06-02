@@ -44,6 +44,7 @@ ClearMedicareGotoGivenName() {
 
 !Numpad7::Send "{Tab 7}"
 ^Numpad7::Send "{Tab 7}"
++Numpad7::Send "{+Tab 7}"
 
 !Numpad9::
 !NumpadMult::clearMedicareGotoGivenName()

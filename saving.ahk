@@ -23,59 +23,57 @@ SaveDelayed() {
 InitiationFieldCtrl := "ThunderRT6TextBox36"
 collectionCodeFieldCtrl := "ThunderRT6TextBox35"
 
-SelectInitField() {
-    global labTrakWin, InitiationFieldCtrl
-    ControlClick(InitiationFieldCtrl, labTrakWin)
-    Sleep 50
-    ControlFocus(InitiationFieldCtrl, labTrakWin)
-    Sleep 50
+SafeControlFocus(ctrl, win) {
+    try {
+        ControlFocus(ctrl, win)
+        return true
+    }
+    catch {
+        return false
+    }
 }
 
-SelectCenterCodeField() {
-    global labTrakWin, collectionCodeFieldCtrl
-    ControlClick(collectionCodeFieldCtrl, labTrakWin)
-    Sleep 50
-    ControlFocus(collectionCodeFieldCtrl, labTrakWin)
-    Sleep 50
-}
-IsInitFieldEmpty() {
-    global labTrakWin, InitiationFieldCtrl
-    currentValue := ControlGetText(InitiationFieldCtrl, labTrakWin)
+IsFieldEmpty(ctrl, win) {
+    currentValue := ControlGetText(ctrl, win)
     if Trim(currentValue) != "" {
         return false
     }
     return true
 }
-IsCenterCodeFieldEmpty() {
-    global labTrakWin, collectionCodeFieldCtrl
-    currentValue := ControlGetText(collectionCodeFieldCtrl, labTrakWin)
-    if Trim(currentValue) != "" {
-        return false
+
+
+CollectionCenter(initCode, centerCode) {
+    global labTrakWin, InitiationFieldCtrl, collectionCodeFieldCtrl
+
+    if SafeControlFocus(InitiationFieldCtrl, labTrakWin) {
+	Sleep 50
+        if IsFieldEmpty(InitiationFieldCtrl, labTrakWin) {
+            SendText initCode
+        }
+        Send "{Tab}" 
     }
-    return true
+
+    Sleep 200
+
+    if SafeControlFocus(collectionCodeFieldCtrl, labTrakWin) {
+	Sleep 50
+        if IsFieldEmpty(collectionCodeFieldCtrl, labTrakWin) {
+            SendText centerCode
+        }
+        Send "{Tab}"
+    }
 }
 
 CollectionCenter_Paused(initCode, centerCode) {
-    SelectInitField()
-    if IsInitFieldEmpty()
+    global labTrakWin, InitiationFieldCtrl
+
+    if SafeControlFocus(InitiationFieldCtrl, labTrakWin) {
         SendText initCode
-
-    Send "{Tab}"
-    Sleep 200
-
-    SelectCenterCodeField()
-    if IsCenterCodeFieldEmpty()
+        Send "{Tab}"
+        Sleep 200
         SendText centerCode
-
-    Send "{Tab}"
-}
-CollectionCenter(initCode, centerCode) {
-    SelectInitField()
-    SendText initCode
-    Send "{Tab}"
-    Sleep 200
-    SendText centerCode
-    Send "{Tab}"
+        Send "{Tab}"
+    }
 }
 
 
@@ -85,8 +83,9 @@ CollectionCenter(initCode, centerCode) {
 ^+n::CollectionCenter("INST", "NUR")
 ^+d::CollectionCenter("DOC", "OTH")
 ^+h::CollectionCenter("DOM", "OTH")
-^+o::CollectionCenter("OPH", "PTH")
+^+o::CollectionCenter("OPH", "OTH")
 
+^+c::CollectionCenter("DCENT", "CAB")
 ^+l::CollectionCenter("COL", "LID")
 ^+f::CollectionCenter("COL", "FAU")
 ^+q::CollectionCenter("COL", "QUA")
@@ -125,6 +124,11 @@ CollectionCenter(initCode, centerCode) {
 
 ^!h::{
     CollectionCenter("DOM", "OTH")
+    SaveDelayed()
+}
+
+^!c::{
+    CollectionCenter("DCENT", "CAB")
     SaveDelayed()
 }
 
