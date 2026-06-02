@@ -78,14 +78,38 @@ AutoRefDrAndSave(drCode:="", providedNumber:="", autoSave:="Yes"){
 ;=============================
 ;Doctor with Autosave - Action
 ;=============================
+;Vito
++^!v::AutoRefDrAndSave("VITO")
+
 ;Dr Tablante - T064 | 064896AW
 +^!t::AutoRefDrAndSave("T064")
 
 ;Dr Rem Iyengar - 008811VT
 +^!i::AutoRefDrAndSave("", "008811VT")
 
+;Dr Anantha Prakash - 011144MX
++^!p::AutoRefDrAndSave("P011")
+
 ;Dr Ala Alzabin - A22
 +^!a::AutoRefDrAndSave("A22", "", "No")
 
-;Dr David Loh - A22
-+^!l::AutoRefDrAndSave("", "0391897L", "")
+
+
+
+;==============
+;Copy To Doctor
+;==============
+!F8::{
+    Click(370, 18)
+    Sleep 150
+    Click(50, 200)
+    Sleep 300
+    Click(150, 250)
+}
+^!F8::{
+    Click(370, 18)
+    Sleep 150
+    Click(50, 250)
+    Sleep 300
+    Click(150, 300)
+}

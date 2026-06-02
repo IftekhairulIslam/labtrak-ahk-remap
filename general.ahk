@@ -46,17 +46,14 @@ clearButtonCtrl := "ThunderRT6UserControlDC4"
 ;Urgent
 ;======
 FillUrgent() {
-    Send "!r"
-    Send "p"
-    Send "{Enter}"
-    Sleep 200
+    ;Send "!r"
+    ;Send "p"
+    ;Send "{Enter}"
+    ;Sleep 200
     
     SendText("Urgent")
     Sleep 200
+    Send "!o"
 
 }
 ^+u::FillUrgent()
-^!u::{
-	FillUrgent()
-	Send "!o"
-}
